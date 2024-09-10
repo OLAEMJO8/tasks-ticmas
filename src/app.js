@@ -8,9 +8,9 @@ const { Pool } = require("pg");
 // Crear el pool de conexiones 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: false 
-  }
+//   ssl: {
+//     rejectUnauthorized: false 
+//   }
 });
 
 // Verificar la conexión con PostgreSQL
