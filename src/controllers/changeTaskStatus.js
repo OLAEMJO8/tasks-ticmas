@@ -6,6 +6,7 @@ exports.changeTaskStatus = async (req, res) => {
   try {
     const task = await Task.findByPk(id);
     task.status = status;
+    task.deleted = status === 'eliminada';
     await task.save();
     res.status(200).json({ task: { ...task.toJSON(), status } });
   } catch (error) {
