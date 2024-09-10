@@ -3,31 +3,19 @@ require('dotenv').config();
 const express = require("express");
 const app = express();
 const taskRoutes = require("./routes/taskRoutes");
-const { Pool } = require("pg");
+const sequelize = require('./config/database'); 
 
-// Crear el pool de conexiones 
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-//   ssl: {
-//     rejectUnauthorized: false 
-//   }
-});
-
-// Verificar la conexión con PostgreSQL
-pool.connect((err, client, release) => {
-  if (err) {
-    return console.error('Error acquiring client', err.stack);
+// Verificar la conexión con Sequelize
+(async () => {
+  try {
+    await sequelize.authenticate();
+    console.log('Connection to the database has been established successfully.');
+  } catch (error) {
+    console.error('Unable to connect to the database:', error);
   }
-  console.log('Database connected successfully');
-  release();
-});
+})();
 
-// Middleware para inyectar la conexión a la base de datos en cada request
-app.use((req, res, next) => {
-  req.db = pool;
-  next();
-});
-
+// Middleware para procesar JSON
 app.use(express.json());
 
 // Rutas
