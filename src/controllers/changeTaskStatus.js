@@ -1,14 +1,11 @@
-const Task = require("../models/task");
+const taskService = require("../services/changeTaskStatusService");
 
 exports.changeTaskStatus = async (req, res) => {
   const { id } = req.params;
   const { status } = req.body;
   try {
-    const task = await Task.findByPk(id);
-    task.status = status;
-    task.deleted = status === 'eliminada';
-    await task.save();
-    res.status(200).json({ task: { ...task.toJSON(), status } });
+    const updatedTask = await taskService.changeTaskStatus(id, status);
+    res.status(200).json(updatedTask);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
